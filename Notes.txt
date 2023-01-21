@@ -1,0 +1,32 @@
+
+Explaination of download_resume view.
+
+user_profile = Profile.objects.get(pk=id): This line retrieves the user's profile from the database 
+using the id parameter passed to the view function.
+
+template = loader.get_template('pdf/resume.html'): This line uses the loader module to load the resume.html template, 
+which should be located in the pdf folder inside the templates folder in your Django project.
+
+html = template.render({'user_profile':user_profile}): This line uses the render method to render the 
+resume.html template with the user's profile data passed as the context.
+
+options ={'page-size':'Letter','encoding':"UTF-8",}: This line defines a dictionary of options that will be passed to the pdfkit.
+from_string method. In this example, the options specify that the page size should be 'Letter' and the encoding should be 'UTF-8'
+
+pdf = pdfkit.from_string(html,False,options): This line uses the pdfkit.from_string method to convert the rendered HTML to a PDF. 
+The first argument is the HTML as a string, the second is boolean False which indicates that the input is a string, not a file and the third is options dictionary.
+
+response = HttpResponse(pdf,content_type='application/pdf'): This line creates a HttpResponse object that contains the PDF as its content, 
+the content_type is set to 'application/pdf' to indicate that the response contains a PDF file.
+
+response['Content-Disposition'] = 'attachment; filename="resume.pdf"': This line sets the Content-Disposition header of the response to attachment; filename="resume.pdf". This
+This tells the browser to download the file, and also sets the suggested filename for the downloaded file to be "resume.pdf"
+
+return response: This line returns the HttpResponse object as the response to the client's request. 
+This will cause the browser to prompt the user to download the PDF file, with the filename "resume.pdf".
+
+
+
+IMP things :
+Install pdfkit : pip install pdfkit
+Also need wkhtmltopdf to install...download and set path in environment variable.(bin path).
